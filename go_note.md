@@ -53,3 +53,143 @@
         r := strings.Repeat("!", utf8.RuneCountInString(msg))
         s := r + msg + r
         fmt.Println(s)
+---
+## 13 STRINGS EXERCISES
+1. Windows Path
+
+        path := `c:\program files\duper super\fun.txt
+        c:\program files\really\funny.png`
+        fmt.Println(path)
+2. Print JSON
+
+        json := `{
+            "Items": [{
+                "Item": {
+                    "name": "Teddy Bear"
+                }
+            }]
+        }`
+        fmt.Println(json)
+3. Raw Concat
+
+        msg := `hi ` + os.Args[1] + ` CONCATENATE-NAME-VARIABLE-HERE!
+        how are you?`
+        fmt.Println(msg)
+4. Count the Chars
+
+        length := len(os.Args[1])
+        length := utf8.RuneCountInString(os.Args[1])
+        fmt.Println(length)
+5. Improved Banger
+
+        msg := strings.ToUpper(os.Args[1])
+        r := strings.Repeat("!", utf8.RuneCountInString(msg))
+        s := r + msg + r
+        fmt.Println(s)
+6. ToLowercase
+
+        s := strings.ToLower(os.Args[1])
+        fmt.Println(s)
+7. Trim It
+    **strings.TrimSpace**
+
+        msg := `
+
+        The weather looks good.
+        I should go and play.
+        `
+
+        fmt.Println(strings.TrimSpace(msg))
+8. Right Trim It
+    **strings.TrimRight**
+
+        name := "inanç           "
+        name = strings.TrimRight(name, " ")
+        l := utf8.RuneCountInString(name)
+        fmt.Println(l)
+---
+## 14 Constants and iota
+### 注意:
+### 1. iota只能用在宣告常數(const)時
+### 2. const在定義時若第二行跟第一行變數量一樣,第二行後可省略後方文字
+
+    const (
+        a = iota
+        b
+        c
+    )
+    fmt.Println(a, b, c)
+
+    ->0 1 2
+
+
+
+    const (
+        a = 1
+        b
+        c
+    )
+    fmt.Println(a, b, c)
+
+    -> 1 1 1
+### 3. iota在換行時才會遞增,同一行宣告兩個變數時會使用同一個
+
+    const (
+        a, a2 = 1 - iota, 2 - iota
+        b = iota
+        c
+    )
+    fmt.Println(a, a2, b, c)
+
+    ->a a2 b c
+    ->1 2 1 2
+
+
+a2在a同行所以還是維持0的狀態
+b已換行,所以iota跑到1
+
+### 4. iota在再次宣告時會從0開始計
+
+    const (
+        a = iota
+        b
+        c
+    )
+    const d = iota
+    fmt.Println(a, b, c, d)
+
+    ->0 1 2 0
+
+---
+## 15 IOTA EXERCISES
+1. Iota Months
+
+        const (
+            Nov = 11 - iota
+            Oct
+            Sep
+        )
+        fmt.Println(Sep, Oct, Nov)
+2. Iota Months #2
+
+        const (
+            _ = iota
+            Jan
+            Feb
+            Mar
+        )
+        fmt.Println(Jan, Feb, Mar)
+3. Iota Seasons
+
+        const (
+            Spring = 3 * (1 + iota)
+            Summer
+            Fall
+            Winter
+        )
+
+        fmt.Println(Winter, Spring, Summer, Fall)
+
+---
+## 16 Print Formatted Output
+    
