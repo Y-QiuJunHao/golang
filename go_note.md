@@ -160,6 +160,24 @@ b已換行,所以iota跑到1
 
     ->0 1 2 0
 
+### 5. iota 來當狀態
+可以用二位元紀錄status的方式
+
+    type Allergen int
+
+    const (
+        IgEggs Allergen = 1 << iota // 1 << 0 which is 00000001
+        IgChocolate                         // 1 << 1 which is 00000010
+        IgNuts                              // 1 << 2 which is 00000100
+        IgStrawberries                      // 1 << 3 which is 00001000
+        IgShellfish                         // 1 << 4 which is 00010000
+    )
+
+    fmt.Println(IgEggs | IgChocolate | IgShellfish)
+
+    // output:
+    // 19
+    // 00010011
 ---
 ## 15 IOTA EXERCISES
 1. Iota Months
@@ -190,6 +208,36 @@ b已換行,所以iota跑到1
 
         fmt.Println(Winter, Spring, Summer, Fall)
 
+
+
 ---
 ## 16 Print Formatted Output
-    
+### 1. Println 跟 Printf差異
+
+**Println是直接印出對應東西,且在參數前後會增加空白分隔.**
+
+    fmt.Println("textA:",a,",textB:",b)
+
+    output: textA: XXX ,textB: YYY
+
+**Printf是經過定義的型態印出**
+
+	fmt.Printf("textA: %d ,textB:%d",a,b)
+
+    output: textA: 123 ,textB: 456
+
+### 2. Printf使用的代碼
+
+| 參數 | 呈現內容 | 呈現結果 | 呈現結果 |
+| :--: | :------ | :------ | :--- |
+| %d | 以數字呈現 | 123 | 123 |
+| %s | 以字串呈現 | abctext | abctext |
+| %T | 顯示形態 | 1.23 | float64 |
+| %q | 字串加上雙引號 | Google | "Google" |
+| %f | 浮點數 | 1.23456 | 1.234560 |
+| %.2f | 浮點數(含位數) | 1.23456 | 1.23 |
+| %v | 直接將變數呈現 | abc1.23 | abc1.23 |
+|  |  | flase | false |
+|  |  | 12 | 12 |
+| %[2]v | 取得第幾個變數顯示 | 123, 456 | 456 |
+
