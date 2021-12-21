@@ -167,10 +167,10 @@ b已換行,所以iota跑到1
 
     const (
         IgEggs Allergen = 1 << iota // 1 << 0 which is 00000001
-        IgChocolate                         // 1 << 1 which is 00000010
-        IgNuts                              // 1 << 2 which is 00000100
-        IgStrawberries                      // 1 << 3 which is 00001000
-        IgShellfish                         // 1 << 4 which is 00010000
+        IgChocolate                 // 1 << 1 which is 00000010
+        IgNuts                      // 1 << 2 which is 00000100
+        IgStrawberries              // 1 << 3 which is 00001000
+        IgShellfish                 // 1 << 4 which is 00010000
     )
 
     fmt.Println(IgEggs | IgChocolate | IgShellfish)
@@ -227,11 +227,14 @@ b已換行,所以iota跑到1
     output: textA: 123 ,textB: 456
 
 ### 2. Printf使用的代碼
+##### 不可將不正確型態的變數做輸出
+##### EX:123abc以%d產出(X)
 
 | 參數 | 呈現內容 | 呈現結果 | 呈現結果 |
 | :--: | :------ | :------ | :--- |
 | %d | 以數字呈現 | 123 | 123 |
 | %s | 以字串呈現 | abctext | abctext |
+| %t | true or false | true | true |
 | %T | 顯示形態 | 1.23 | float64 |
 | %q | 字串加上雙引號 | Google | "Google" |
 | %f | 浮點數 | 1.23456 | 1.234560 |
@@ -241,3 +244,4 @@ b已換行,所以iota跑到1
 |  |  | 12 | 12 |
 | %[2]v | 取得第幾個變數顯示 | 123, 456 | 456 |
 
+### 3. 練習(重點)
