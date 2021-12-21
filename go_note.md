@@ -3,33 +3,33 @@
 ### 印出文字使用方法
 1. 使用""包起文字時,文字只能使用一行tab等需使用\t\n等處理,要顯示"時需使用\\"
 
-        "\"我\n要\n測\n試\n\""
+       "\"我\n要\n測\n試\n\""
 
 2. 使用\`包起文字時,文字可以收錄多行,且tab等依照輸入內容呈現.
 
     如下:
 
-        `"我
-        要
-        測
-        試"`
+       `"我
+       要
+       測
+       試"`
 3. 延伸:coding路徑時也可以使用``包起較為方便
     ex:
 
-        fmt.Println("c:\\a\\b\\c")
-        fmt.Pringln(`c:\a\b\c`)
+       fmt.Println("c:\\a\\b\\c")
+       fmt.Pringln(`c:\a\b\c`)
 
 ---
 ## 11 How to get the length of a utf-8 string?
 ### utf8文字計算問題
 1. String計算使用func:
 
-        len("XXX")
+       len("XXX")
 
 2. utf8計算:
 
-        import("unicode/utf8")
-        utf8.RuneCountInString("XXX")
+       import("unicode/utf8")
+       utf8.RuneCountInString("XXX")
 
 使用len計算時會將文字照byte的方式計算出結果,中文會有4byte
 而使用RuneCountInString時會把中文一個字算成1
@@ -39,74 +39,74 @@
 1. 重複某個詞
    EX:輸入abc產出abc!!!
 
-        import("strings")
-        strings.Repeat("!",次數)
+       import("strings")
+       strings.Repeat("!",次數)
 2. 大寫
 
-        import("strings")
-        strings.ToUpper("xxx")
+       import("strings")
+       strings.ToUpper("xxx")
 
 
-練習範例: 使用repeat功能1次但要呈現前後都加驚嘆號且改大寫
+    練習範例: 使用repeat功能1次但要呈現前後都加驚嘆號且改大寫
 
-        msg := strings.ToUpper(os.Args[1])
-        r := strings.Repeat("!", utf8.RuneCountInString(msg))
-        s := r + msg + r
-        fmt.Println(s)
+       msg := strings.ToUpper(os.Args[1])
+       r := strings.Repeat("!", utf8.RuneCountInString(msg))
+       s := r + msg + r
+       fmt.Println(s)
 ---
 ## 13 STRINGS EXERCISES
 1. Windows Path
 
-        path := `c:\program files\duper super\fun.txt
-        c:\program files\really\funny.png`
-        fmt.Println(path)
+       path := `c:\program files\duper super\fun.txt
+       c:\program files\really\funny.png`
+       fmt.Println(path)
 2. Print JSON
 
-        json := `{
-            "Items": [{
-                "Item": {
-                    "name": "Teddy Bear"
-                }
-            }]
-        }`
-        fmt.Println(json)
+       json := `{
+           "Items": [{
+               "Item": {
+                   "name": "Teddy Bear"
+               }
+           }]
+       }`
+       fmt.Println(json)
 3. Raw Concat
 
-        msg := `hi ` + os.Args[1] + ` CONCATENATE-NAME-VARIABLE-HERE!
-        how are you?`
-        fmt.Println(msg)
+       msg := `hi ` + os.Args[1] + ` CONCATENATE-NAME-VARIABLE-HERE!
+       how are you?`
+       fmt.Println(msg)
 4. Count the Chars
 
-        length := len(os.Args[1])
-        length := utf8.RuneCountInString(os.Args[1])
-        fmt.Println(length)
+       length := len(os.Args[1])
+       length := utf8.RuneCountInString(os.Args[1])
+       fmt.Println(length)
 5. Improved Banger
 
-        msg := strings.ToUpper(os.Args[1])
-        r := strings.Repeat("!", utf8.RuneCountInString(msg))
-        s := r + msg + r
-        fmt.Println(s)
+       msg := strings.ToUpper(os.Args[1])
+       r := strings.Repeat("!", utf8.RuneCountInString(msg))
+       s := r + msg + r
+       fmt.Println(s)
 6. ToLowercase
 
-        s := strings.ToLower(os.Args[1])
-        fmt.Println(s)
+       s := strings.ToLower(os.Args[1])
+       fmt.Println(s)
 7. Trim It
     **strings.TrimSpace**
 
-        msg := `
+       msg := `
 
-        The weather looks good.
-        I should go and play.
-        `
+       The weather looks good.
+       I should go and play.
+       `
 
-        fmt.Println(strings.TrimSpace(msg))
+       fmt.Println(strings.TrimSpace(msg))
 8. Right Trim It
     **strings.TrimRight**
 
-        name := "inanç           "
-        name = strings.TrimRight(name, " ")
-        l := utf8.RuneCountInString(name)
-        fmt.Println(l)
+       name := "inanç           "
+       name = strings.TrimRight(name, " ")
+       l := utf8.RuneCountInString(name)
+       fmt.Println(l)
 ---
 ## 14 Constants and iota
 ### 注意:
@@ -182,31 +182,31 @@ b已換行,所以iota跑到1
 ## 15 IOTA EXERCISES
 1. Iota Months
 
-        const (
-            Nov = 11 - iota
-            Oct
-            Sep
-        )
-        fmt.Println(Sep, Oct, Nov)
+       const (
+           Nov = 11 - iota
+           Oct
+           Sep
+       )
+       fmt.Println(Sep, Oct, Nov)
 2. Iota Months #2
 
-        const (
-            _ = iota
-            Jan
-            Feb
-            Mar
-        )
-        fmt.Println(Jan, Feb, Mar)
+       const (
+           _ = iota
+           Jan
+           Feb
+           Mar
+       )
+       fmt.Println(Jan, Feb, Mar)
 3. Iota Seasons
 
-        const (
-            Spring = 3 * (1 + iota)
-            Summer
-            Fall
-            Winter
-        )
+       const (
+           Spring = 3 * (1 + iota)
+           Summer
+           Fall
+           Winter
+       )
 
-        fmt.Println(Winter, Spring, Summer, Fall)
+       fmt.Println(Winter, Spring, Summer, Fall)
 
 
 
@@ -222,7 +222,7 @@ b已換行,所以iota跑到1
 
 **Printf是經過定義的型態印出**
 
-	fmt.Printf("textA: %d ,textB:%d",a,b)
+    fmt.Printf("textA: %d ,textB:%d",a,b)
 
     output: textA: 123 ,textB: 456
 
