@@ -245,3 +245,128 @@ b已換行,所以iota跑到1
 | %[2]v | 取得第幾個變數顯示 | 123, 456 | 456 |
 
 ### 3. 練習(重點)
+
+
+
+
+------------------------------------------
+
+## 23 24 If Statement Else and Else If
+使用方法
+
+    A := 10
+    B := 20
+    C := true
+
+    if A < B && C {
+        fmt.Printf("?")
+    } else {
+        fmt.Printf("!")
+    }
+
+    if A < B && !C {
+        fmt.Printf("?")
+    } else if A > B {
+        fmt.Printf("!")
+    } else {
+        fmt.Printf("*")
+    }
+
+## 25 練習
+1. Age Seasons
+
+       const (
+           old = "Getting older"
+           wis = "Getting wiser"
+           adu = "Adulthood"
+           blo = "Young blood"
+           boo = "Booting up"
+       )
+       age := 22
+
+       if age > 60 {
+           fmt.Printf(old)
+       } else if age > 30 {
+           fmt.Printf(wis)
+       } else if age > 20 {
+           fmt.Printf(adu)
+       } else if age > 10 {
+           fmt.Printf(blo)
+       } else {
+           fmt.Printf(boo)
+       }
+
+2. Simplify It
+
+       isSphere, radius := true, 200
+   
+       if isSphere && radius >= 200 {
+           fmt.Println("It's a big sphere.")
+       } else {
+           fmt.Println("I don't know.")
+       }
+3. Arg Count
+
+       const (
+           ArgsErr = "Give me args"
+           ArgsG5  = "There are %d arguments"
+       )
+   
+       if len(os.Args) < 2 {
+           fmt.Printf(ArgsErr)
+       } else if len(os.Args) == 2 {
+           fmt.Printf("%s", os.Args[1])
+       } else if len(os.Args) == 3 {
+           fmt.Printf("%s %s", os.Args[1], os.Args[2])
+       } else {
+           fmt.Printf(ArgsG5, len(os.Args)-1)
+       }
+4. Vowel or Consonant
+母音:aeiou
+疑似母音:wy
+
+       const (
+           ArgsErr = "Give me args"
+       )
+   
+       if len(os.Args) < 2 || len(os.Args[1]) > 1 {
+           fmt.Printf(ArgsErr)
+           return
+       }
+       s := os.Args[1]
+       if strings.IndexAny(s, "aeiou") != -1 {
+           fmt.Printf("%q is a vowel.\n", s)
+       } else if s == "w" || s == "y" {
+           fmt.Printf("%q is sometimes a vowel, sometimes not.\n", s)
+       } else {
+           fmt.Printf("%q is a consonant.\n", s)
+       }
+
+---
+## 26 Tiny Challenge: Validate a single user
+驗證身分
+
+    const (
+        ArgsErr = "Usage: [username] [password]\n"
+        UserErr = "Access denied for %q\n"
+        PassErr = "Invalid password for %q\n"
+        UserAcc = "Access granted to %q\n"
+
+        user1, user2 = "jack", "inc"
+        pass1, pass2 = "1888", "1288"
+    )
+
+    if len(os.Args) != 3 {
+        fmt.Printf(ArgsErr)
+    } else {
+        user, pass := os.Args[1], os.Args[2]
+        if user != user1 && user != user2 {
+            fmt.Printf(UserErr, user)
+        } else if user == user1 && pass == pass1 || user == user2 && pass == pass2 {
+            fmt.Printf(UserAcc, user)
+        } else {
+            fmt.Printf(PassErr, user)
+        }
+    }
+
+---
