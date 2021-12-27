@@ -1,6 +1,15 @@
-[toc]
+- [10 What is a Raw String Literal?](#10)
+- [11 How to get the length of a utf-8 string?](#11)
+- [12 Example: Banger: Yell it back!](#12)
+- [13 STRINGS EXERCISES](#13)
+- [14 Constants and iota](#14)
+- [15 IOTA EXERCISES](#15)
+- [16 Print Formatted Output](#16)
+- [23 24 If Statement Else and Else If](#23)
+- [25 練習](#25)
+- [26 Tiny Challenge: Validate a single user](#26)
 # golang學習(10-21節)
-## 10 What is a Raw String Literal?
+## <div id='10' />10 What is a Raw String Literal?
 ### 印出文字使用方法
 1. 使用""包起文字時,文字只能使用一行tab等需使用\t\n等處理,要顯示"時需使用\\"
 
@@ -21,7 +30,7 @@
        fmt.Pringln(`c:\a\b\c`)
 
 ---
-## 11 How to get the length of a utf-8 string?
+## <div id='11' />11 How to get the length of a utf-8 string?
 ### utf8文字計算問題
 1. String計算使用func:
 
@@ -36,7 +45,7 @@
 而使用RuneCountInString時會把中文一個字算成1
 
 ---
-## 12 Example: Banger: Yell it back!
+## <div id='12' />12 Example: Banger: Yell it back!
 1. 重複某個詞
    EX:輸入abc產出abc!!!
 
@@ -55,7 +64,7 @@
        s := r + msg + r
        fmt.Println(s)
 ---
-## 13 STRINGS EXERCISES
+## <div id='13' />13 STRINGS EXERCISES
 1. Windows Path
 
        path := `c:\program files\duper super\fun.txt
@@ -109,7 +118,7 @@
        l := utf8.RuneCountInString(name)
        fmt.Println(l)
 ---
-## 14 Constants and iota
+## <div id='14' />14 Constants and iota
 ### 注意:
 ### 1. iota只能用在宣告常數(const)時
 ### 2. const在定義時若第二行跟第一行變數量一樣,第二行後可省略後方文字
@@ -180,7 +189,7 @@ b已換行,所以iota跑到1
     // 19
     // 00010011
 ---
-## 15 IOTA EXERCISES
+## <div id='15' />15 IOTA EXERCISES
 1. Iota Months
 
        const (
@@ -212,7 +221,7 @@ b已換行,所以iota跑到1
 
 
 ---
-## 16 Print Formatted Output
+## <div id='16' />16 Print Formatted Output
 ### 1. Println 跟 Printf差異
 
 **Println是直接印出對應東西,且在參數前後會增加空白分隔.**
@@ -252,7 +261,7 @@ b已換行,所以iota跑到1
 
 ------------------------------------------
 
-## 23 24 If Statement Else and Else If
+## <div id='23' />23 24 If Statement Else and Else If
 使用方法
 
     A := 10
@@ -273,7 +282,7 @@ b已換行,所以iota跑到1
         fmt.Printf("*")
     }
 
-## 25 練習
+## <div id='25' />25 練習
 1. Age Seasons
 
        const (
@@ -344,7 +353,7 @@ b已換行,所以iota跑到1
        }
 
 ---
-## 26 Tiny Challenge: Validate a single user
+## <div id='26' />26 Tiny Challenge: Validate a single user
 驗證身分
 
     const (
