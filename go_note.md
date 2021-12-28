@@ -8,6 +8,11 @@
 - [23 24 If Statement Else and Else If](#23)
 - [25 練習](#25)
 - [26 Tiny Challenge: Validate a single user](#26)
+- [28 Tiny Challenge: Validate multiple users](#28)
+- [31 What is a nil value?](#31)
+- [32 What is an error value?](#32)
+- [35 Solution: Feet to Meter](#35)
+- [36 What is a Simple Statement?](#36)
 # golang學習(10-21節)
 ## <div id='10' />10 What is a Raw String Literal?
 ### 印出文字使用方法
@@ -362,6 +367,32 @@ b已換行,所以iota跑到1
         PassErr = "Invalid password for %q\n"
         UserAcc = "Access granted to %q\n"
 
+        user1 = "jack"
+        pass1 = "1888"
+    )
+
+    if len(os.Args) != 3 {
+        fmt.Printf(ArgsErr)
+    } else {
+        user, pass := os.Args[1], os.Args[2]
+        if user != user1 && user != user2 {
+            fmt.Printf(UserErr, user)
+        } else if user == user1 && pass == pass1 {
+            fmt.Printf(UserAcc, user)
+        } else {
+            fmt.Printf(PassErr, user)
+        }
+    }
+
+---
+## <div id='28' />28 Tiny Challenge: Validate multiple users
+
+    const (
+        ArgsErr = "Usage: [username] [password]\n"
+        UserErr = "Access denied for %q\n"
+        PassErr = "Invalid password for %q\n"
+        UserAcc = "Access granted to %q\n"
+
         user1, user2 = "jack", "inc"
         pass1, pass2 = "1888", "1288"
     )
@@ -378,5 +409,82 @@ b已換行,所以iota跑到1
             fmt.Printf(PassErr, user)
         }
     }
+---
+
+## <div id='31' />31 What is a nil value?
+**nil是go版的null**
+
+    a = do()
+    if a != nil {
+        fmt.Println("error")
+        return
+    }
+    fmt.Println("access")
 
 ---
+## <div id='32' />32 What is an error value?
+strconv.Atoi -> 將string轉成int
+回傳為: 變數, 錯誤訊息
+
+    tmpstr := "22307646"
+    tmpint := 22307
+    stoi, _ := strconv.Atoi(tmpstr)
+    itos := strconv.Itoa(tmpint)
+    // stoi := strconv.iota()
+    fmt.Printf("stoi(%T) : %[1]d\n", stoi)
+    fmt.Printf("itos(%T) : %[1]s\n", itos)
+    // fmt.Printf("string(%T) :%[1]s\n", int(tmpstr))
+    fmt.Printf("string(%T) :%[1]s\n", string(tmpint))
+
+### 額外學習
+strconv.Itoa -> 將int轉string
+#### 不可使用強制轉型方式轉型態因上述範例輸出為以下:
+
+    stoi(int) : 22307646
+    itos(string) : 22307
+    string(string) :圣
+使用Itoa時是正常轉出,但string強制轉型時會變成中文(甚至是亂碼)
+
+---
+## <div id='32' />32 What is an error value?
+像strconv.Atoi()會有error的回傳值,如以下
+
+    n, error := strconv.Atoi(os.Args[1])
+
+    fmt.Println("convert number  :", n)
+    fmt.Println("error           :", err)
+
+
+---
+## <div id='35' />35 Solution: Feet to Meter
+**學習重點**: strconv.ParseFloat(arg, 64), %g(顯示非零的浮點數)
+
+    if len(os.Args) < 2 {
+        fmt.Printf("請輸入參數\n")
+        return
+    }
+    num := os.Args[1]
+    fnum, err := strconv.ParseFloat(num, 64)
+    if err != nil {
+        fmt.Printf("error: %q is not number.\n", num)
+        // fmt.Printf("%s", err)
+        return
+    }
+    fmt.Printf("%g feet is %g meters", fnum, fnum * 0.3048)
+
+---
+## <div id='36' />36 What is a Simple Statement?
+短判斷宣告方式:
+原型:
+
+    fnum, err := strconv.ParseFloat(num, 64)
+    if err == nil {
+        fmt.Printfln("num :%g ",fnum)
+    }
+短宣告:
+
+    if fnum, err := strconv.ParseFloat(num, 64); err == nil {
+        fmt.Printf("num :%g ",fnum)
+    }
+將設定參數直接塞到if跟條件式中間
+這是判斷前先定義值
