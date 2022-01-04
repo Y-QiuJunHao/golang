@@ -13,6 +13,9 @@
 - [32 What is an error value?](#32)
 - [35 Solution: Feet to Meter](#35)
 - [36 What is a Simple Statement?](#36)
+- [38 Famous Shadowing Gotcha](#38)
+- [41 42 43 44 Learn the Switch Statement](#41)
+- [45 46 47 Learn the Switch Statement 2](#45)
 # golang學習(10-21節)
 ## <div id='10' />10 What is a Raw String Literal?
 ### 印出文字使用方法
@@ -488,3 +491,344 @@ strconv.Itoa -> 將int轉string
     }
 將設定參數直接塞到if跟條件式中間
 這是判斷前先定義值
+
+---
+## <div id='38' />38 Famous Shadowing Gotcha
+
+if條件中定義賦予值的參數為 **區域變數** ,條件終止後不會有效
+
+    if fnum, err := strconv.ParseFloat(num, 64); err != nil {
+        fmt.Printf("error")
+    }
+    fmt.Printf("%f", fnum)
+
+    output:
+    undefined: fnum
+但若有先宣告並且不是使用宣告並賦予(:=),而只有賦予值(=), 則值會被存下
+
+    var (
+        fnum float64
+        err  error
+    )
+    if fnum, err = strconv.ParseFloat(num, 64); err != nil {
+        fmt.Printf("error")
+    }
+    fmt.Printf("%f", fnum)
+
+    output:
+    11.000000
+
+---
+## <div id='38' />38 Famous Shadowing Gotcha
+### movie ratings
+
+    if len(os.Args) != 2 {
+        fmt.Printf("Arg need")
+    } else if n, err := strconv.Atoi(os.Args[1]); err != nil {
+        fmt.Printf("Requires age")
+    } else if n < 0 {
+        fmt.Printf("Wrong age: %q", os.Args[1])
+    } else if n > 17 {
+        fmt.Println("R-Rated")
+    } else if n < 13 {
+        fmt.Println("PG-Rated")
+    } else {
+        fmt.Println("PG-13")
+    }
+
+解答:
+
+    if len(os.Args) != 2 {
+        fmt.Println("Requires age")
+        return
+    }
+
+    age, err := strconv.Atoi(os.Args[1])
+
+    if err != nil || age < 0 {
+        fmt.Printf(`Wrong age: %q`+"\n", os.Args[1])
+        return
+    } else if age > 17 {
+        fmt.Println("R-Rated")
+    } else if age >= 13 && age <= 17 {
+        fmt.Println("PG-13")
+    } else if age < 13 {
+        fmt.Println("PG-Rated")
+    }
+解答2:
+
+    if len(os.Args) != 2 {
+        fmt.Println("Requires age")
+        return
+    } else if age, err := strconv.Atoi(os.Args[1]); err != nil || age < 0 {
+        fmt.Printf(`Wrong age: %q`+"\n", os.Args[1])
+        return
+    } else if age > 17 {
+        fmt.Println("R-Rated")
+    } else if age >= 13 && age <= 17 {
+        fmt.Println("PG-13")
+    } else if age < 13 {
+        fmt.Println("PG-Rated")
+    }
+
+### Odd or Even
+
+    const (
+        non  = "Pick a number"
+        num  = "%q is not a number"
+        even = "%d is an even number"
+        odd  = "%d is an odd number"
+        gb8  = "%d is an even number and it's divisible by 8"
+    )
+    var (
+        number int
+        err    error
+    )
+    if len(os.Args) != 2 {
+        fmt.Printf(non)
+        return
+    } else if number, err = strconv.Atoi(os.Args[1]); err != nil {
+        fmt.Printf(num, os.Args[1])
+        return
+    }
+    if number%8 == 0 {
+        fmt.Printf(gb8, number)
+    } else if number%2 == 0 {
+        fmt.Printf(even, number)
+    } else {
+        fmt.Printf(odd, number)
+    }
+
+解答:
+
+    if len(os.Args) != 2 {
+        fmt.Println("Pick a number")
+        return
+    }
+
+    n, err := strconv.Atoi(os.Args[1])
+    if err != nil {
+        fmt.Printf("%q is not a number\n", os.Args[1])
+        return
+    }
+
+    if n%8 == 0 {
+        fmt.Printf("%d is an even number and it's divisible by 8\n", n)
+    } else if n%2 == 0 {
+        fmt.Printf("%d is an even number\n", n)
+    } else {
+        fmt.Printf("%d is an odd number\n", n)
+    }
+
+### leap-year
+閏年規則:
+每四年一潤,但整除100不算,或整除四百閏年
+- 西元年份除以4不可整除，為平年。
+- 西元年份除以4可整除，且除以100不可整除，為閏年。
+- 西元年份除以100可整除，且除以400不可整除，為平年
+- 西元年份除以400可整除，為閏年。
+
+所以規則如下
+
+    const (
+        non  = "Give me a year number"
+        num  = "%q is not a valid year."
+        year = "%d is%s a leap year."
+    )
+    if len(os.Args) != 2 {
+        fmt.Printf(non)
+        return
+    }
+    if number, err := strconv.Atoi(os.Args[1]); err != nil {
+        fmt.Printf(num, os.Args[1])
+    } else if number%4 == 0 && number%100 != 0 || number%400 == 0 {
+        fmt.Printf(year, number, "")
+    } else {
+        fmt.Printf(year, number, " not")
+    }
+
+解答:
+
+    if len(os.Args) != 2 {
+        fmt.Println("Give me a year number")
+        return
+    }
+
+    year, err := strconv.Atoi(os.Args[1])
+    if err != nil {
+        fmt.Printf("%q is not a valid year.\n", os.Args[1])
+        return
+    }
+
+    // Notice that:
+    // I've intentionally created this solution as verbose
+    // as I can.
+    //
+    // See the next exercise.
+
+    var leap bool
+    if year%400 == 0 {
+        leap = true
+    } else if year%100 == 0 {
+        leap = false
+    } else if year%4 == 0 {
+        leap = true
+    }
+
+    if leap {
+        fmt.Printf("%d is a leap year.\n", year)
+    } else {
+        fmt.Printf("%d is not a leap year.\n", year)
+    }
+### Days in a Month
+
+    const (
+        day = "%q has %d days."
+    )
+    year := time.Now().Year()
+    mon2 := 28
+    if year%4 == 0 && year%100 != 0 || year%400 == 0 {
+        mon2 = 29
+    }
+    if len(os.Args) != 2 {
+        fmt.Printf("Give me a month name")
+        return
+    }
+    mon := strings.ToLower(os.Args[1])
+    if mon != "january" && mon != "february" && mon != "march" && mon != "april" && mon != "may" && mon != "june" && mon != "july" && mon != "august" && mon != "september" && mon != "october" && mon != "november" && mon != "december" {
+        fmt.Printf("%q is not a month.", mon)
+        return
+    }
+    if mon == "january" ||
+        mon == "march" ||
+        mon == "may" ||
+        mon == "july" ||
+        mon == "august" ||
+        mon == "october" ||
+        mon == "december" {
+        fmt.Printf(day, os.Args[1], 31)
+    } else if mon == "february" {
+        fmt.Printf(day, os.Args[1], mon2)
+    } else {
+        fmt.Printf(day, os.Args[1], 30)
+    }
+
+解答:
+
+    if len(os.Args) != 2 {
+        fmt.Println("Give me a month name")
+        return
+    }
+
+    // get the current year and find out whether it's a leap year
+    year := time.Now().Year()
+    leap := year%4 == 0 && (year%100 != 0 || year%400 == 0)
+
+    // setting it to 28, saves me typing it below again
+    days := 28
+
+    month := os.Args[1]
+
+    // case insensitive
+    if m := strings.ToLower(month); m == "april" ||
+        m == "june" ||
+        m == "september" ||
+        m == "november" {
+        days = 30
+    } else if m == "january" ||
+        m == "march" ||
+        m == "may" ||
+        m == "july" ||
+        m == "august" ||
+        m == "october" ||
+        m == "december" {
+        days = 31
+    } else if m == "february" {
+        // try a "logical and operator" above.
+        // like: `else if m == "february" && leap`
+        if leap {
+            days = 29
+        }
+    } else {
+        fmt.Printf("%q is not a month.\n", month)
+        return
+    }
+
+    fmt.Printf("%q has %d days.\n", month, days)
+
+---
+## <div id='41' />41 42 43 44 Learn the Switch Statement 1
+1. 不用書寫break
+2. 若判斷式在case中switch條件可寫為true(或省略)
+3. 若不是條件式中則用default
+
+以下程式
+
+
+    T := time.Now().Hour()
+    switch {
+    case T >= 18:
+        fmt.Printf("good evening")
+    case T >= 12:
+        fmt.Printf("good afternoon")
+    case T >= 6:
+        fmt.Printf("good morning")
+    default:
+        fmt.Printf("good night")
+    }
+
+---
+## <div id='45' />45 46 47 Learn the Switch Statement 2
+1. 同樣可使用短宣告寫在switch中
+2. 若要繼續執行(不使用原break功能),使用fallthrough
+
+以下程式fallthrough範例
+
+    switch i := 10; {
+    case i > 100:
+        fmt.Printf("big ")
+        fallthrough
+    case i > 0:
+        fmt.Printf("positive ")
+        fallthrough
+    default:
+        fmt.Printf("number")
+    }
+
+    output:
+    i=124
+    big positive number
+    
+    i=80
+    positive number
+    
+    i=0
+    number
+
+以下挑戰項目
+
+    switch T := time.Now().Hour(); {
+    case T > 17:
+        fmt.Printf("good evening")
+    case T > 12:
+        fmt.Printf("good afternoon")
+    case T > 5:
+        fmt.Printf("good morning")
+    case T > 0:
+        fmt.Printf("good night")
+    }
+
+答案:
+
+    switch T := time.Now().Hour(); {
+    case T >= 18:
+        fmt.Printf("good evening")
+    case T >= 12:
+        fmt.Printf("good afternoon")
+    case T >= 6:
+        fmt.Printf("good morning")
+    default:
+        fmt.Printf("good night")
+    }
+
+---
