@@ -16,6 +16,10 @@
 - [38 Famous Shadowing Gotcha](#38)
 - [41 42 43 44 Learn the Switch Statement](#41)
 - [45 46 47 Learn the Switch Statement 2](#45)
+- [49 If vs Switch: Which one to use?](#49)
+- [50 ★ SWITCH EXERCISES ★](#50)
+- [52. 53. 54. 55. Create a multiplication table](#55)
+- [56. 57. For Range: Learn the easy way!](#57)
 # golang學習(10-21節)
 ## <div id='10' />10 What is a Raw String Literal?
 ### 印出文字使用方法
@@ -832,3 +836,391 @@ if條件中定義賦予值的參數為 **區域變數** ,條件終止後不會�
     }
 
 ---
+## <div id='49' />49 If vs Switch: Which one to use?
+
+當if else條件偏多時,可考慮使用switch case做,程式碼會比較少
+
+    if m:=os.Args[1];m=="Dec" || m=="Jan" || m=="Feb" {
+        fmt.Println("Winter")
+    } else if m=="Mar" || m=="Apr" || m=="May" {
+        fmt.Println("Spring")
+    } else if m=="Jun" || m=="Jul" || m=="Aug" {
+        fmt.Println("Summer")
+    } else if m=="Sep" || m=="Oct" || m=="Nov" {
+        fmt.Println("Fall")
+    } else {
+        fmt.Printf("%q is not a month\n", m)
+    }
+
+switch版
+
+    switch m:=os.Args[1];m {
+    case "Dec", "Jan", "Feb":
+        fmt.Println("Winter")
+    case "Mar", "Apr", "May":
+        fmt.Println("Spring")
+    case "Jun", "Jul", "Aug":
+        fmt.Println("Summer")
+    case "Sep", "Oct", "Nov":
+        fmt.Println("Fall")
+    default:
+        fmt.Printf("%q is not a month\n", m)
+    }
+
+---
+## <div id='50' />50 ★ SWITCH EXERCISES ★
+
+### Richter Scale
+    if len(os.Args) != 2 {
+        fmt.Println("Give me the magnitude of the earthquake.")
+        return
+    }
+    n, err := strconv.ParseFloat(os.Args[1], 64)
+    if err != nil {
+        fmt.Println("I couldn't get that, sorry.")
+        return
+    }
+    switch {
+    case n < 2.0:
+        fmt.Printf("%.2f is micro")
+    case n >= 2.0 && n < 3.0:
+        fmt.Printf("%.2f is very minor", n)
+    case n >= 3.0 && n < 4.0:
+        fmt.Printf("%.2f is minor", n)
+    case n >= 4.0 && n < 5.0:
+        fmt.Printf("%.2f is light", n)
+    case n >= 5.0 && n < 6.0:
+        fmt.Printf("%.2f is moderate", n)
+    case n >= 6.0 && n < 7.0:
+        fmt.Printf("%.2f is strong", n)
+    case n >= 7.0 && n < 8.0:
+        fmt.Printf("%.2f is major", n)
+    case n >= 8.0 && n < 10.0:
+        fmt.Printf("%.2f is great", n)
+    case n >= 10.0:
+        fmt.Printf("%.2f is massive", n)
+    }
+
+解答:
+
+    args := os.Args
+    if len(args) != 2 {
+        fmt.Println("Give me the magnitude of the earthquake.")
+        return
+    }
+
+    richter, err := strconv.ParseFloat(args[1], 64)
+    if err != nil {
+        fmt.Println("I couldn't get that, sorry.")
+        return
+    }
+
+    var desc string
+
+    switch r := richter; {
+    case r < 2:
+        desc = "micro"
+    case r >= 2 && r < 3:
+        desc = "very minor"
+    case r >= 3 && r < 4:
+        desc = "minor"
+    case r >= 4 && r < 5:
+        desc = "light"
+    case r >= 5 && r < 6:
+        desc = "moderate"
+    case r >= 6 && r < 7:
+        desc = "strong"
+    case r >= 7 && r < 8:
+        desc = "major"
+    case r >= 8 && r < 10:
+        desc = "great"
+    default:
+        desc = "massive"
+    }
+
+    fmt.Printf("%.2f is %s\n", richter, desc)
+
+### Richter Scale #2
+
+    if len(os.Args) != 2 {
+        fmt.Println("Tell me the magnitude of the earthquake in human terms.")
+        return
+    }
+    var word string
+    n := strings.ToLower(os.Args[1])
+    switch n {
+    case "micro":
+        word = "%s's richter scale is less than 2.0"
+    case "very minor":
+        word = "%s's richter scale is 2 - 2.9"
+    case "minor":
+        word = "%s's richter scale is 3 - 3.9"
+    case "light":
+        word = "%s's richter scale is 4 - 4.9"
+    case "moderate":
+        word = "%s's richter scale is 5 - 5.9"
+    case "strong":
+        word = "%s's richter scale is 6 - 6.9"
+    case "major":
+        word = "%s's richter scale is 7 - 7.9"
+    case "great":
+        word = "%s's richter scale is 8 - 9.9"
+    case "massive":
+        word = "%s's richter scale is 10+"
+    default:
+        word = "%s's richter scale is unknown"
+    }
+    fmt.Printf(word, n)
+
+解答:
+
+    args := os.Args
+    if len(args) != 2 {
+        fmt.Println("Tell me the magnitude of the earthquake in human terms.")
+        return
+    }
+
+    var richter string
+
+    desc := args[1]
+
+    switch desc {
+    case "micro":
+        richter = "less than 2.0"
+    case "very minor":
+        richter = "2 - 2.9"
+    case "minor":
+        richter = "3 - 3.9"
+    case "light":
+        richter = "4 - 4.9"
+    case "moderate":
+        richter = "5 - 5.9"
+    case "strong":
+        richter = "6 - 6.9"
+    case "major":
+        richter = "7 - 7.9"
+    case "great":
+        richter = "8 - 9.9"
+    case "massive":
+        richter = "10+"
+    default:
+        richter = "unknown"
+    }
+
+    fmt.Printf(
+        "%s's richter scale is %s\n",
+        desc, richter,
+    )
+
+### Convert
+
+    const (
+        usage       = "Usage: [username] [password]"
+        errUser     = "Access denied for %q.\n"
+        errPwd      = "Invalid password for %q.\n"
+        accessOK    = "Access granted to %q.\n"
+        user, user2 = "jack", "inanc"
+        pass, pass2 = "1888", "1879"
+    )
+
+    args := os.Args
+
+    if len(args) != 3 {
+        fmt.Println(usage)
+        return
+    }
+
+    u, p := args[1], args[2]
+
+    //
+    // REFACTOR THIS TO A SWITCH
+    //
+
+    switch {
+    case u != user && u != user2:
+        fmt.Printf(errUser, u)
+    case u == user && p == pass, u == user2 && p == pass2:
+        fmt.Printf(accessOK, u)
+    default:
+        fmt.Printf(errPwd, u)
+    }
+
+解答:
+
+    const (
+        usage       = "Usage: [username] [password]"
+        errUser     = "Access denied for %q.\n"
+        errPwd      = "Invalid password for %q.\n"
+        accessOK    = "Access granted to %q.\n"
+        user, user2 = "jack", "inanc"
+        pass, pass2 = "1888", "1879"
+    )
+
+    args := os.Args
+
+    if len(args) != 3 {
+        fmt.Println(usage)
+        return
+    }
+
+    u, p := args[1], args[2]
+
+    //
+    // REFACTOR THIS TO A SWITCH
+    //
+
+    switch {
+    case u != user && u != user2:
+        fmt.Printf(errUser, u)
+    case u == user && p == pass:
+        // notice this one (no more duplication)
+        fallthrough
+    case u != user2 && p == pass2:
+        fmt.Printf(accessOK, u)
+    default:
+        fmt.Printf(errPwd, u)
+    }
+
+### String Manipulator
+
+    if len(os.Args) != 3 {
+        fmt.Println("[command] [string]\n\nAvailable commands: lower, upper and title")
+        return
+    }
+    s := os.Args[2]
+    switch t := os.Args[1]; t {
+    case "lower":
+        s = strings.ToLower(s)
+        fmt.Println(s)
+    case "upper":
+        s = strings.ToUpper(s)
+        fmt.Println(s)
+    case "title":
+        s = strings.Title(s)
+        fmt.Println(s)
+    default:
+        fmt.Printf("Unknown command: %q", t)
+
+    }
+
+解答:
+
+    const usage = `[command] [string]
+
+    Available commands: lower, upper and title`
+
+    args := os.Args
+    if len(args) != 3 {
+        fmt.Println(usage)
+        return
+    }
+
+    cmd, str := args[1], args[2]
+    switch cmd {
+    case "lower":
+        fmt.Println(strings.ToLower(str))
+    case "upper":
+        fmt.Println(strings.ToUpper(str))
+    case "title":
+        fmt.Println(strings.Title(str))
+    default:
+        fmt.Printf("Unknown command: %q\n", cmd)
+    }
+
+### Days in a Month
+
+解答
+
+
+    if len(os.Args) != 2 {
+        fmt.Println("Give me a month name")
+        return
+    }
+
+    year := time.Now().Year()
+    leap := year%4 == 0 && (year%100 != 0 || year%400 == 0)
+
+    days, month := 28, os.Args[1]
+
+    switch strings.ToLower(month) {
+    case "april", "june", "september", "november":
+        days = 30
+    case "january", "march", "may", "july",
+        "august", "october", "december":
+        days = 31
+    case "february":
+        if leap {
+            days = 29
+        }
+    default:
+        fmt.Printf("%q is not a month.\n", month)
+        return
+    }
+
+    fmt.Printf("%q has %d days.\n", month, days)
+
+---
+## <div id='55' />52. 53. 54. 55. Create a multiplication table
+
+for判斷式:
+
+    for i := 1; i <= max; i++ {
+        XXX
+    }
+
+預設值 ; 判斷值 ; 累進值
+或寫作while方式
+
+    for {
+        XXX
+    }
+
+跳出:
+
+    break
+
+繼續:
+
+    continue
+
+小測驗:
+
+    if len(os.Args) != 2 {
+        fmt.Println("[number]")
+    }
+    max, err := strconv.Atoi(os.Args[1])
+    if err != nil {
+        fmt.Println("error number")
+    }
+    fmt.Printf("%5s", "X")
+    for i := 1; i <= max; i++ {
+        fmt.Printf("%5d", i)
+    }
+    fmt.Println("")
+    for i := 1; i <= max; i++ {
+        fmt.Printf("%5d", i)
+        for j := 1; j <= max; j++ {
+            fmt.Printf("%5d", i*j)
+        }
+        fmt.Println("")
+    }
+
+---
+## <div id='57' />56. 57. For Range: Learn the easy way!
+
+strings.Fields(string)可以直接將字串分成陣列(英文格式,以空白分割)
+且從0開始編號
+
+    words:=strings.Fields(os.Args[1])
+    for i:=0;i<len(words);i++ {
+        fmt.Printf("%s", words[i])
+    }
+
+range方式取值回傳index跟值
+
+    for i, v:= range os.Args {
+
+    }
+
+os.Args[1:]建議是這樣寫
+從1開始(0是程式位置,1是值)
